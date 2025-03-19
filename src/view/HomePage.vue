@@ -50,6 +50,9 @@ function catchNovel(fileName) {
     if (!db.objectStoreNames.contains('catalog')) {
       db.createObjectStore('catalog', { keyPath: 'id' });
     }
+    if (!db.objectStoreNames.contains('items')) {
+      db.createObjectStore('items', { keyPath: 'name' });
+    }
   };
   request.onsuccess = (event) => {
     const db = event.target.result;
@@ -271,7 +274,7 @@ function btnTextSwitch(clickable, content = '导入《超神机械师》文本�
 
 <template>
   <div class="contentCenter">
-    <el-button round id="homePageImportBtn" :disabled="importBtnDisabled" @click="loadNovel">{{ importBtnText }}</el-button>
+    <el-button class="homePageImportBtn" :disabled="importBtnDisabled" @click="loadNovel">{{ importBtnText }}</el-button>
   </div>
 </template>
 

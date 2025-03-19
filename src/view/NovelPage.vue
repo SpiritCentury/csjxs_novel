@@ -24,7 +24,7 @@ let showPage = ref('reading')
 <template>
   <div class="novelPage">
     <div class="leftMenu">
-      <el-button id="backHomeBtn" @click="backHome">回到主页</el-button>
+      <el-button class="backHomeBtn" @click="backHome">回到主页</el-button>
       <el-menu
           default-active="reading"
           class="elMenu"

@@ -365,7 +365,7 @@ function readSetting() {
 </script>
 
 <template>
-  <div class="componentContain novelReading">
+  <div class="novelReading">
     <div class="novelContentPart">
       <div class="topSearch">
         <el-input
@@ -439,7 +439,8 @@ function readSetting() {
   </div>
 </template>
 
-<style scoped>
+<style>
+@import "src/css/novelReading.css";
 .topSearch,.catalogJump{
   :deep(.el-input__wrapper) {
     border-radius: 16px;

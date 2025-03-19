@@ -62,7 +62,7 @@ const itemInfoFormTypeOptions = ref(['人物', '地点', '道具', '装备', '�
 const itemInfoFormSuperPowerTypeOptions = ref(['机械', '武道', '异能', '魔法', '念力'])
 const itemInfoFormSuperPowerLevelOptions = ref(['F', 'E', 'D', 'C', 'B', 'A', 'S', 'S+', 'Ss', 'X'])
 const itemInfoFormFriendLinksOptions = computed(() => {
-  return props.noteItemList.map((item, index) => {
+  return props.noteItemList.map(item => {
     return item.name
   })
 })
@@ -76,7 +76,7 @@ onMounted(() => {
 
 watch(chapterId, (newVal, oldVal) => {
 })
-watch(() => props.selectedWord, (newVal, oldVal) => {
+watch(() => props.selectedWord, (newVal) => {
   if (!newVal || itemInfoForm.value.name !== '') {
     return;
   }
@@ -89,7 +89,7 @@ watch(() => props.selectedWord, (newVal, oldVal) => {
     }
   })
 })
-watch(itemInfoForm, (newVal, oldVal) => {
+watch(itemInfoForm, (newVal) => {
   if (newVal.name) {
     openCollapse('1')
   }
@@ -193,7 +193,7 @@ function resetForm() {
         <div class="inlineDiv"><div class="infoTitle width5">本章字数：</div><div class="infoContent">{{ chapterObj.wordNum }}</div></div>
       </div>
     </div>
-    <div class="scrollPart">
+    <div class="readingToolScrollPart noScrollbar">
       <el-collapse v-model="collapseActiveName" @change="collapseChanged" class="formCollapse">
         <el-collapse-item title="词库更新" name="1">
           <div class="card">
@@ -241,12 +241,14 @@ function resetForm() {
             </el-form>
           </div>
         </el-collapse-item>
-        <el-collapse-item title="本章人物" name="2"></el-collapse-item>
+        <el-collapse-item title="本章人物" name="2">
+          <div class=""></div>
+        </el-collapse-item>
       </el-collapse>
     </div>
   </div>
 </template>
 
-<style scoped>
-
+<style>
+@import "src/css/readingTool.css";
 </style>

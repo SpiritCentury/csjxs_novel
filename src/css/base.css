@@ -2,7 +2,10 @@
     font-family: 'HanYiKaiTi';
     src: url("public/font/HanYiKaiTi.ttf");
 }
-
+/* 基础元素特殊设定 */
 .noFocusOutline:focus {
     outline: none;
+}
+.noScrollbar::-webkit-scrollbar {
+    display: none;
 }

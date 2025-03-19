@@ -115,8 +115,8 @@ onUnmounted(() => {
       <div v-show="noteObj.superPowerType" class="superPowerType">[{{ noteObj.superPowerType }}系]</div>
       <div v-show="noteObj.superPowerLevel" class="superPowerLevel">{{ noteObj.superPowerLevel }}</div>
     </div>
-    <div class="content">
-      <div v-show="noteObj.labels" class="itemInfo">
+    <div class="content noScrollbar">
+      <div v-show="noteObj.labels && noteObj.length > 0" class="itemInfo noScrollbar">
         <div class="itemInfoTitle">标签：</div>
         <div class="itemInfoContent">
           <el-tag type="primary" v-for="(tag, index) in noteObj.labels" :key="index">{{ tag }}</el-tag>
@@ -141,76 +141,7 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style scoped>
-@import "src/css/main.css";
-.cardHeader {
-  height: 34px;
-  border-bottom: 1px solid #ccc;
-  cursor: move;
-  display: flex;
-  align-items: center;
-  user-select: none;
-  .itemName {
-    height: 100%;
-    font-family: 'HanYiKaiTi', cursive;
-    font-size: 30px;
-    font-weight: bold;
-  }
-  .itemType,.superPowerType {
-    display: flex;
-    align-items: flex-end;
-    padding-bottom: 5px;
-    margin-left: 5px;
-    height: calc(100% - 5px);
-    font-family: 'HanYiKaiTi', cursive;
-    font-size: 16px;
-  }
-  .superPowerLevel {
-    margin-left: auto;
-    margin-right: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: cornflowerblue;
-  }
-}
-.noteCard {
-  height: 250px;
-  width: 400px;
-  background-color: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
-  border-radius: 12px;
-  padding: 10px;
-  transition: box-shadow 0.3s, transform 0.3s;
-}
-.noteCard.active {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* 置顶时的阴影效果 */
-  transform: scale(1.05); /* 轻微放大效果 */
-}
-.content {
-  cursor: auto;
-  overflow: auto;
-  .itemInfo {
-    display: flex;
-    margin: 10px 10px;
-    font-family: 'HanYiKaiTi', cursive;
-    align-items: center;
-    overflow-x: auto;
-  }
+<style>
+@import "src/css/noteCard.css";
 
-  .itemInfoContent {
-    line-height: 1.5em;
-    .el-tag+.el-tag {
-      margin-left: 5px;
-    }
-    .el-tag {
-      font-size: 14px;
-    }
-  }
-}
-.content::-webkit-scrollbar {
-  display: none;
-}
-.itemInfo::-webkit-scrollbar {
-  display: none;
-}
 </style>
