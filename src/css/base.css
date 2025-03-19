@@ -2,10 +2,28 @@
     font-family: 'HanYiKaiTi';
     src: url("public/font/HanYiKaiTi.ttf");
 }
-/* 基础元素特殊设定 */
+/* 通用 */
 .noFocusOutline:focus {
     outline: none;
 }
 .noScrollbar::-webkit-scrollbar {
     display: none;
+}
+.card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+/* 变量设置 */
+.novelPage {
+    --left-menu-width: 160px;
+    --top-search-height: 44px;
+    --default-line: 1px solid rgb(220, 223, 230);
+    --reading-part-padding: 100px;
+    --font-size: 22px;
+    --line-height: 44px;
+    --novel-font-family: 'HanYiKaiTi';
+    --paragraph-gap: 15px;
+    --catalog-animation-time: 0.3s
 }
