@@ -93,7 +93,7 @@ function openNoteCard(wordArray) {
     noteItemList.value.forEach(note => {
       if (item === note.name) {
         if (!(matchNoteList.value.find(e => e.name === item))) { // 避免重复打开同一个词条
-          matchNoteList.value.push(note)
+          matchNoteList.value.push(JSON.parse(JSON.stringify(note)));
         }
       }
     })
@@ -192,11 +192,18 @@ function switchChapterByKey(event) {
   switchChapterByArrow(arrow === 'ArrowLeft' ? 'left' : 'right')
 }
 
-// 左键事件
+// 左键事件-关闭未锁定的卡片、重置卡片的z轴信息、关闭词条更新表单
 function handleClickEvent() {
   const handler = () => {
-    matchNoteList.value.length = 0
-    highestZIndex = 1
+    handleCardNoteZIndex(-1)
+    for (let i = matchNoteList.value.length - 1; i >= 0; i--) {
+      if (!matchNoteList.value[i].pinned) {
+        matchNoteList.value.splice(i, 1)
+      }
+    }
+    if (matchNoteList.value.length === 0) {
+      highestZIndex = 1
+    }
     readingToolRef.value.closeCollapse('1')
   }
   novelContent.value.addEventListener('click', handler)
@@ -256,9 +263,7 @@ function handleParagraphProgress() {
   children.forEach(child => {
     const rect = child.getBoundingClientRect();
     const parentRect = container.getBoundingClientRect();
-
     const distance = rect.top - parentRect.top;
-
     if (distance < minDistance && distance > 0) {
       minDistance = distance;
       closestChild = child;
@@ -345,7 +350,7 @@ function handleCardNoteZIndex(openIndex) {
     return;
   }
   const noteCards = document.querySelectorAll('.noteCard')
-  if (noteCards[openIndex].classList.contains('active')) {
+  if (openIndex > -1 && openIndex < noteCards.length && noteCards[openIndex].classList.contains('active')) {
     return;
   }
   noteCards.forEach((card, index) => {
@@ -357,6 +362,28 @@ function handleCardNoteZIndex(openIndex) {
     }
   })
   highestZIndex += 1;
+}
+// 处理卡片钉选效果
+function handleCardNotePined(itemName, divStyle) {
+  matchNoteList.value.forEach(note => {
+    if (note.name === itemName) {
+      if (note.pinned !== undefined) {
+        note.pinned = !note.pinned
+      } else {
+        note.pinned = true
+      }
+      note.divStyle = divStyle
+    }
+  })
+}
+// 处理卡片单独关闭效果
+function handleCardNoteClose(itemName) {
+  console.log('closeCard')
+  const index = matchNoteList.value.findIndex(note => note.name === itemName)
+  if (index !== -1) {
+    matchNoteList.value.splice(index, 1)
+    console.log('closeCard' + index)
+  }
 }
 
 
@@ -381,6 +408,7 @@ function readSetting() {
         <div v-for="(paragraph, index) in textArray" class="textParagraph" :key="index" ref="novelParagraphs" :index="index">
           {{ paragraph }}
         </div>
+        <div class="novelContentBottom"></div>
       </div>
       <div class="operationArea">
         <button v-if="catalogReady" class="operationBtn" @click="switchCatalog" :class="catalogOpen ? 'rotated' : ''"><el-icon :size="20"><Expand /></el-icon></button>
@@ -434,6 +462,8 @@ function readSetting() {
           :click-position="clickPosition"
           :open-index="index"
           @handle-z-index="handleCardNoteZIndex"
+          @card-pined="handleCardNotePined"
+          @close-card="handleCardNoteClose"
       ></NoteCard>
     </template>
   </div>

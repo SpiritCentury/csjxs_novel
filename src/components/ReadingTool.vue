@@ -23,6 +23,7 @@ let chapterContent = ref(null);
 // other
 const characterInfoItem = ref({
   name: '',
+  aliaNames: [],
   type: '',
   labels: [],
   superPowerType: '',
@@ -40,7 +41,8 @@ const characterInfoItem = ref({
 // 词库更新Form
 const itemInfoForm = ref({
   name: '',
-  type: '人物',
+  aliaNames: [],
+  type: '',
   labels: [],
   superPowerType: '',
   superPowerLevel: '',
@@ -115,16 +117,16 @@ function closeCollapse(val) {
 }
 
 // 词库更新，表单处理
-function itemSave() {
+function itemSave(param) {
   switch (itemInfoForm.value.type) {
     case '人物':
-      characterSave()
+      characterSave(param)
       break;
     case '地点':
-      placeSave()
+      placeSave(param)
       break;
     default:
-      defaultItemSave()
+      defaultItemSave(param)
   }
 }
 
@@ -154,7 +156,7 @@ function fillItemInfoToForm(val, from) { // 查找后填充信息至表单
       itemInfoForm.value.firstProminence = tempObj.firstProminence
       itemInfoForm.value.lastProminence = tempObj.lastProminence
     } else {
-      resetForm()
+      // resetForm()
       itemInfoForm.value.name = val
       if (from === 'selectedWatch'){
         itemInfoForm.value.firstProminence = true
@@ -162,7 +164,7 @@ function fillItemInfoToForm(val, from) { // 查找后填充信息至表单
     }
   })
 }
-function characterSave() {
+function characterSave(param) {
   // todo 先查询原有的数据，进行部分增量修改
   if (!formValidate()) {
     return;
@@ -178,32 +180,36 @@ function characterSave() {
   }
   updateItemInfoToDB(obj).then((data) => {
     if (data === 'success') {
-      saveSuccess()
+      saveSuccess(param)
     }
   })
 }
 
-function placeSave() {
-  defaultItemSave()
+function placeSave(param) {
+  defaultItemSave(param)
 }
 
-function defaultItemSave() {
+function defaultItemSave(param) {
   if (!formValidate()) {
     return;
   }
   const obj = JSON.parse(JSON.stringify(itemInfoForm.value))
   updateItemInfoToDB(obj).then((data) => {
     if (data === 'success') {
-      saveSuccess()
+      saveSuccess(param)
     }
   })
 }
 
-function saveSuccess() {
+function saveSuccess(param) {
   ElMessage.success('保存成功')
-  resetForm()
+  if (param === 'noReset') {
+    itemInfoForm.value.name = ''
+  } else {
+    resetForm()
+    setFocusOnNovel()
+  }
   emit('reloadItems')
-  setFocusOnNovel()
 }
 
 function resetForm() {
@@ -220,32 +226,48 @@ function handleCharacterList() {
   const lastProminenceArray = []
   const firstProminenceArray = []
   props.noteItemList.forEach(item => {
-    const index = chapterContent.value.indexOf(item.name)
     if (item.type === '人物'
         && (!item.lastProminenceChapter || item.lastProminenceChapter >= chapterId.value)
-        && (!item.firstProminenceChapter || item.firstProminenceChapter <= chapterId.value)
-        && index !== -1) {
-      const obj = {
-        name: item.name,
-        superPowerType: item.superPowerType,
-        superPowerLevel: item.superPowerLevel,
-        firstProminence: item.firstProminenceChapter && item.firstProminenceChapter === chapterId.value,
-        lastProminence: item.lastProminenceChapter && item.lastProminenceChapter === chapterId.value,
-        index: index
+        && (!item.firstProminenceChapter || item.firstProminenceChapter <= chapterId.value)) {
+      let namesArray = [item.name]
+      if (item.aliaNames && item.aliaNames.length > 0) {
+        namesArray = [item.name, ...item.aliaNames]
       }
-      if (item.lastProminenceChapter === chapterId.value) {
-        lastProminenceArray.push(obj)
-      } else if (item.firstProminenceChapter === chapterId.value) {
-        firstProminenceArray.push(obj)
-      } else {
-        tempArray.push(obj)
+      const index = findCharacterFirstPosition(namesArray)
+      if (index !== -1) {
+        const obj = {
+          name: item.name,
+          superPowerType: item.superPowerType,
+          superPowerLevel: item.superPowerLevel,
+          firstProminence: item.firstProminenceChapter && item.firstProminenceChapter === chapterId.value,
+          lastProminence: item.lastProminenceChapter && item.lastProminenceChapter === chapterId.value,
+          index: index
+        }
+        if (item.lastProminenceChapter === chapterId.value) {
+          lastProminenceArray.push(obj)
+        } else if (item.firstProminenceChapter === chapterId.value) {
+          firstProminenceArray.push(obj)
+        } else {
+          tempArray.push(obj)
+        }
       }
     }
   })
   // 排序：最后一次出场的人物排在最前，首次出场的人物其次，剩余角色按在本章出场顺序排序
   lastProminenceArray.sort((a, b) => a.index - b.index)
+  firstProminenceArray.sort((a, b) => a.index - b.index)
   tempArray.sort((a, b) => a.index - b.index)
   charactersInChapter.value = [...lastProminenceArray, ...firstProminenceArray, ...tempArray]
+}
+function findCharacterFirstPosition(names) {
+  let firstPosition = -1;
+  for (const name of names) {
+    const position = chapterContent.value.indexOf(name);
+    if (position !== -1 && (firstPosition === -1 || position < firstPosition)) {
+      firstPosition = position;
+    }
+  }
+  return firstPosition;
 }
 
 function editCharacter(character) {
@@ -292,34 +314,36 @@ function setFocusOnNovel() {
                              :value="item"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item v-show="itemInfoForm.type === '人物'" label="标签" style="width: 100%" class="girdFullRow"
-                            prop="labels">
-                <el-input-tag v-model="itemInfoForm.labels"></el-input-tag>
+              <el-form-item label="别名" prop="aliaNames">
+                <el-input-tag v-model="itemInfoForm.aliaNames"></el-input-tag>
+              </el-form-item>
+              <el-form-item label="标签" prop="labels">
+                <el-input-tag v-model="itemInfoForm.labels" clearable></el-input-tag>
               </el-form-item>
               <el-form-item v-show="itemInfoForm.type === '人物'" label="超能体系" prop="superPowerType">
-                <el-select v-model="itemInfoForm.superPowerType">
+                <el-select v-model="itemInfoForm.superPowerType" clearable>
                   <el-option v-for="item in itemInfoFormSuperPowerTypeOptions" :key="item" :label="item"
                              :value="item"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item v-show="itemInfoForm.type === '人物'" label="超能阶位" prop="superPowerLevel">
-                <el-select v-model="itemInfoForm.superPowerLevel">
+                <el-select v-model="itemInfoForm.superPowerLevel" clearable>
                   <el-option v-for="item in itemInfoFormSuperPowerLevelOptions" :key="item" :label="item"
                              :value="item"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="介绍" class="girdFullRow" prop="introduction">
-                <el-input type="textarea" v-model="itemInfoForm.introduction"></el-input>
+                <el-input type="textarea" v-model="itemInfoForm.introduction" clearable></el-input>
               </el-form-item>
               <el-form-item v-show="itemInfoForm.type === '人物'" label="人物经历" class="girdFullRow"
                             prop="personalExperience">
-                <el-input type="textarea" v-model="itemInfoForm.personalExperience"></el-input>
+                <el-input type="textarea" v-model="itemInfoForm.personalExperience" clearable></el-input>
               </el-form-item>
               <el-form-item label="额外补充" class="girdFullRow" prop="additionalSupplement">
-                <el-input type="textarea" v-model="itemInfoForm.additionalSupplement"></el-input>
+                <el-input type="textarea" v-model="itemInfoForm.additionalSupplement" clearable></el-input>
               </el-form-item>
               <el-form-item label="友情链接" class="girdFullRow" prop="friendLinks">
-                <el-select v-model="itemInfoForm.friendLinks" multiple allow-create filterable>
+                <el-select v-model="itemInfoForm.friendLinks" multiple allow-create filterable clearable>
                   <el-option v-for="item in itemInfoFormFriendLinksOptions" :key="item" :label="item"
                              :value="item"></el-option>
                 </el-select>
@@ -333,6 +357,7 @@ function setFocusOnNovel() {
                            inactive-color="#ff4949"></el-switch>
               </el-form-item>
               <div class="girdFullRow centerOperation">
+                <el-button type="primary" @click="itemSave('noReset')">仅保存</el-button>
                 <el-button type="primary" @click="itemSave">保存</el-button>
                 <el-button type="danger" @click="itemDelete">删除</el-button>
                 <el-button type="info" @click="resetForm">重置</el-button>
@@ -350,7 +375,9 @@ function setFocusOnNovel() {
             <div class="lineHeader" :class="c.lastProminence ? 'color1' : 'color0'"></div>
             <div class="characterName">{{ c.name }}</div>
             <div class="characterDivider"></div>
-            <div class="characterSuperPowerType" v-show="c.superPowerType">[{{ c.superPowerType }}]</div>
+            <div class="characterSuperPowerType" v-show="c.superPowerType">
+              <el-tag type="danger">{{ c.superPowerType }}系</el-tag>
+            </div>
             <div class="characterSuperPowerLevel">{{ c.superPowerLevel }}</div>
             <div class="characterProminenceFirstOrLast" >
               <el-tag v-show="c.firstProminence" type="primary">首次出场</el-tag>

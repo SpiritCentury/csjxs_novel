@@ -10,7 +10,7 @@
 }
 .noteCard.active {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* 置顶时的阴影效果 */
-    transform: scale(1.05); /* 轻微放大效果 */
+    /*transform: scale(1.05); !* 轻微放大效果 *!*/
 }
 .cardHeader {
     height: 34px;
@@ -19,9 +19,9 @@
     display: flex;
     align-items: center;
     user-select: none;
+    font-family: '楷书', cursive;
     .itemName {
         height: 100%;
-        font-family: 'HanYiKaiTi', cursive;
         font-size: 30px;
         font-weight: bold;
     }
@@ -31,16 +31,25 @@
         padding-bottom: 5px;
         margin-left: 5px;
         height: calc(100% - 5px);
-        font-family: 'HanYiKaiTi', cursive;
-        font-size: 16px;
     }
     .superPowerLevel {
-        margin-left: auto;
-        margin-right: 10px;
+        margin-left: 5px;
         font-size: 20px;
         font-weight: bold;
         color: cornflowerblue;
         font-family: "Microsoft YaHei", serif;
+    }
+    .el-tag {
+        font-size: 16px;
+    }
+    .cardHeadOperation {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        .cardHeadOperationBtn {
+            margin-left: 5px;
+            cursor: pointer;
+        }
     }
 }
 
@@ -50,7 +59,7 @@
     .itemInfo {
         display: flex;
         margin: 10px 10px;
-        font-family: 'HanYiKaiTi', cursive;
+        font-family: '楷体', cursive;
         align-items: center;
         overflow-x: auto;
     }
@@ -63,4 +72,22 @@
             font-size: 14px;
         }
     }
+}
+.colorForCharacter {
+    background-color: #E3FDFD;
+}
+.colorForPlace {
+    background-color: #FAF1E6;
+}
+.colorForProps {
+    background-color: #FBFBFB;
+}
+.colorForEquipment {
+    background-color: #FCF596;
+}
+.colorForOrganization {
+    background-color: #FFF7D1;
+}
+.colorForTask {
+    background-color: #A1E3F9;
 }

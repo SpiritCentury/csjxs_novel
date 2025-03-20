@@ -1,7 +1,10 @@
 <script setup>
 import {onMounted, onUnmounted, ref, watch} from "vue";
+import {CloseBold} from "@element-plus/icons-vue";
+import MyPin from "@/svg/MyPin.vue";
+import MySolidPin from "@/svg/MySolidPin.vue";
 
-const emit = defineEmits(['handleZIndex']);
+const emit = defineEmits(['handleZIndex', 'cardPined', 'closeCard']);
 const props = defineProps({
   noteObj: {
     type: Object,
@@ -24,6 +27,7 @@ const props = defineProps({
   }
 })
 
+// 拖拽效果
 const noteCard = ref(null); // 获取 DOM 元素
 const isDragging = ref(false); // 是否正在拖拽
 const constrainToViewport = ref(true); // 保持在视口内
@@ -34,14 +38,12 @@ const divStyle = ref({
   left: `${props.clickPosition[0]}px`,
   top: `${props.clickPosition[1]}px`
 });
-
 // 开始拖拽
 const startDrag = (e) => {
   isDragging.value = true;
   offsetX.value = (e.clientX - noteCard.value.getBoundingClientRect().left) * 1;
   offsetY.value = (e.clientY - noteCard.value.getBoundingClientRect().top) * 1;
 };
-
 // 拖拽中
 const onDrag = (e) => {
   if (isDragging.value) {
@@ -62,12 +64,10 @@ const onDrag = (e) => {
     divStyle.value.top = `${top}px`;
   }
 };
-
 // 停止拖拽
 const stopDrag = () => {
   isDragging.value = false;
 };
-
 // 初始位置确定
 function initPosition() {
   let positionX
@@ -76,9 +76,11 @@ function initPosition() {
   const textElement = document.getElementsByClassName('textParagraph')[0];
   const fontSize = parseInt(window.getComputedStyle(textElement).fontSize, 10)
   if (props.clickPosition[1] + fontSize * (1 + props.openIndex) + 250 < window.innerHeight) {
-    positionY = props.clickPosition[1] + fontSize * (1 + props.openIndex)
+    // positionY = props.clickPosition[1] + fontSize * (1 + props.openIndex)
+    positionY = props.clickPosition[1] + fontSize
   } else {
-    positionY = props.clickPosition[1] - fontSize * (1 + props.openIndex) - 250
+    // positionY = props.clickPosition[1] - fontSize * (1 + props.openIndex) - 250
+    positionY = props.clickPosition[1] - fontSize - 250
   }
   positionX = props.clickPosition[0] + fontSize * props.openIndex
   divStyle.value.left = `${positionX}px`;
@@ -88,6 +90,22 @@ function initPosition() {
 // 处理卡片Z轴高度
 function handleZIndex() {
   emit('handleZIndex', props.openIndex)
+}
+
+// 钉选效果
+let cardPined = ref(false);
+watch(() => props.noteObj, (newVal) => {
+  cardPined.value = newVal.pinned;
+  divStyle.value = newVal.divStyle;
+}, {deep: true})
+function changeCardPined() {
+  cardPined.value = !cardPined.value;
+  emit('cardPined', props.noteObj.name, divStyle.value)
+}
+
+// 关闭卡片
+function closeCard() {
+  emit('closeCard', props.noteObj.name)
 }
 
 // 监听事件
@@ -105,15 +123,30 @@ onUnmounted(() => {
   noteCard.value?.removeEventListener('mousedown', handleZIndex);
 });
 
+// 色彩管理
+const itemTypeArray = ['人物', '地点', '道具', '装备', '组织', '任务']
+const superPowerTypeArray = ['机械', '武道', '异能', '魔法', '念力']
+const superPowerLevelArray = ['F', 'E', 'D', 'C', 'B', 'A', 'S', 'S+', 'Ss', 'X']
+const cardColorClassArray = ['colorForCharacter', 'colorForPlace', 'colorForProps', '', 'colorForOrganization', '']
+
 </script>
 
 <template>
-  <div :style="divStyle" class="noteCard" ref="noteCard">
+  <div :style="divStyle" class="noteCard" :class="cardColorClassArray[itemTypeArray.indexOf(noteObj.type)]" ref="noteCard">
     <div class="cardHeader" @mousedown="startDrag">
       <div class="itemName">{{ noteObj.name }}</div>
-      <div class="itemType">[{{ noteObj.type }}]</div>
-      <div v-show="noteObj.superPowerType" class="superPowerType">[{{ noteObj.superPowerType }}系]</div>
+      <div class="itemType">
+        <el-tag type="primary">{{ noteObj.type }}</el-tag>
+      </div>
+      <div v-show="noteObj.superPowerType" class="superPowerType">
+        <el-tag type="danger">{{ noteObj.superPowerType }}系</el-tag>
+      </div>
       <div v-show="noteObj.superPowerLevel" class="superPowerLevel">{{ noteObj.superPowerLevel }}</div>
+      <div class="cardHeadOperation">
+        <MyPin v-show="!cardPined" class="cardHeadOperationBtn" @click="changeCardPined"></MyPin>
+        <MySolidPin v-show="cardPined" class="cardHeadOperationBtn" @click="changeCardPined"></MySolidPin>
+        <el-icon color="black" :size="18" class="cardHeadOperationBtn" @click="closeCard"><CloseBold /></el-icon>
+      </div>
     </div>
     <div class="content noScrollbar">
       <div v-show="noteObj.labels && noteObj.length > 0" class="itemInfo noScrollbar">

@@ -41,6 +41,9 @@
     word-wrap: break-word;
     margin-bottom: var(--paragraph-gap);
 }
+.novelContentBottom {
+    height: 100px;
+}
 .operationArea {
     width: 60px;
     bottom: 22px;

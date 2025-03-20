@@ -65,7 +65,7 @@
     }
     .el-form-item {
         margin-bottom: 10px;
-        .el-form-item__label,.el-select__wrapper,.el-input__inner {
+        .el-form-item__label,.el-select__wrapper,.el-input__inner,.el-textarea__inner {
             font-size: 15px;
             font-family: var(--novel-font-family), sans-serif;
         }
@@ -113,20 +113,24 @@
     }
     .characterName {
         font-size: 18px;
-        min-width: 3em;
+        min-width: 4em;
     }
     .characterDivider {
         width: 0;
         height: 80%;
-        margin: 0 10px;
+        margin: 0 5px;
         border-right: var(--default-line);
     }
     .characterSuperPowerType {
         margin-right: 10px;
+        .el-tag {
+            font-size: 16px;
+        }
     }
     .characterSuperPowerLevel {
         color: cornflowerblue;
         font-family: "Microsoft YaHei", serif;
+        font-weight: bold;
     }
     .characterProminenceFirstOrLast {
         margin-left: auto;
