@@ -142,6 +142,5 @@ onUnmounted(() => {
 </template>
 
 <style>
-@import "src/css/noteCard.css";
 
 </style>

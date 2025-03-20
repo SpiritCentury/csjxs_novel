@@ -51,9 +51,10 @@ onMounted(() => {
     </div>
     <div class="prominence">
       <el-tag
-          class="prominenceTag"
           v-for="(item, index) in prominenceChapters"
+          class="prominenceTag"
           :color="colorArray[item]"
+          :index = 'index'
       ></el-tag>
     </div>
     <div>

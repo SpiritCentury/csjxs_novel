@@ -440,7 +440,6 @@ function readSetting() {
 </template>
 
 <style>
-@import "src/css/novelReading.css";
 .topSearch,.catalogJump{
   :deep(.el-input__wrapper) {
     border-radius: 16px;

@@ -1,10 +1,11 @@
-@import "./base.css";
 .readingTools {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 .chapterInfo {
-    height: auto;
+    height: 58px;
     width: calc(100% - 20px);
     padding: 10px;
     font-family: var(--novel-font-family), sans-serif;
@@ -29,7 +30,8 @@
 }
 .readingToolScrollPart {
     overflow-y: auto;
-    height: auto;
+    /*height: calc(100% - 99px);*/
+    flex: 1;
     width: calc(100% - 20px);
     padding: 10px;
     font-family: var(--novel-font-family), sans-serif;
@@ -78,4 +80,63 @@
 .centerOperation {
     display: flex;
     justify-content: center;
+}
+
+.characterInChapter {
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    height: 32px;
+    line-height: 32px;
+    margin: 5px 10px;
+    padding: 0 10px 0 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
+    font-size: 16px;
+    transition: transform .3s;
+    cursor: pointer;
+    user-select: none;
+    .lineHeader {
+        background-color: #1b88ee;
+        width: 6px;
+        height: 100%;
+        border-radius: 6px 0 0 6px;
+        margin-right: 10px;
+    }
+    .color0 {
+        background-color: #1b88ee;
+    }
+    .color1 {
+        background-color: #ff0012;
+    }
+    .color2 {
+        background-color: #ffcc4b;
+    }
+    .characterName {
+        font-size: 18px;
+        min-width: 3em;
+    }
+    .characterDivider {
+        width: 0;
+        height: 80%;
+        margin: 0 10px;
+        border-right: var(--default-line);
+    }
+    .characterSuperPowerType {
+        margin-right: 10px;
+    }
+    .characterSuperPowerLevel {
+        color: cornflowerblue;
+        font-family: "Microsoft YaHei", serif;
+    }
+    .characterProminenceFirstOrLast {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        .el-tag {
+            margin-left: 5px;
+        }
+    }
+}
+.characterInChapter:hover {
+    transform: scale(1.02);
 }

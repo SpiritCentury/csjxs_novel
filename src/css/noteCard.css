@@ -40,6 +40,7 @@
         font-size: 20px;
         font-weight: bold;
         color: cornflowerblue;
+        font-family: "Microsoft YaHei", serif;
     }
 }
 
@@ -53,7 +54,6 @@
         align-items: center;
         overflow-x: auto;
     }
-
     .itemInfoContent {
         line-height: 1.5em;
         .el-tag+.el-tag {
