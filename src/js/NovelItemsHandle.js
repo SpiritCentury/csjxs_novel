@@ -47,3 +47,16 @@ export function getItemInfoFromDB(name) {
     })
   })
 }
+
+export function deleteItemInDB(name) {
+  return new Promise((resolve, reject) => {
+    openDatabase().then(db => {
+      const dbHelper = new DBHelper(db)
+      dbHelper.deleteItemByKey('items', name).then(data => {
+        resolve(data)
+      }).catch(error => {
+        reject(error);
+      })
+    })
+  })
+}

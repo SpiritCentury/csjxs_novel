@@ -149,7 +149,7 @@ const cardColorClassArray = ['colorForCharacter', 'colorForPlace', 'colorForProp
       </div>
     </div>
     <div class="content noScrollbar">
-      <div v-show="noteObj.labels && noteObj.length > 0" class="itemInfo noScrollbar">
+      <div v-show="noteObj.labels && noteObj.labels.length > 0" class="itemInfo noScrollbar">
         <div class="itemInfoTitle">标签：</div>
         <div class="itemInfoContent">
           <el-tag type="primary" v-for="(tag, index) in noteObj.labels" :key="index">{{ tag }}</el-tag>

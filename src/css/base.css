@@ -14,6 +14,12 @@
     border-radius: 12px;
     padding: 10px;
 }
+.columnDivider {
+    width: 0;
+    height: 80%;
+    margin: 0 5px;
+    border-right: var(--default-line);
+}
 
 /* 变量设置 */
 .novelPage {

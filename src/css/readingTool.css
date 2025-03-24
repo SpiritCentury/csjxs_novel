@@ -10,6 +10,14 @@
     padding: 10px;
     font-family: var(--novel-font-family), sans-serif;
     border-bottom: var(--default-line);
+    .chapterTitleInfo {
+        flex: 1;
+    }
+    .chapterNumInfo {
+        width: 60px;
+        display: flex;
+        align-items: center;
+    }
 }
 .width5 {
     width: 5em;

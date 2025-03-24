@@ -106,4 +106,14 @@ export class DBHelper {
       request.onerror = (event) => reject(event.target.error);
     })
   }
+  deleteItemByKey(storeName, key) {
+    return new Promise((resolve, reject) => {
+      const store = this.getObjectStore(storeName, "readwrite");
+      const request = store.delete(key);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = (event) => {
+        reject(event.target.error);
+      }
+    })
+  }
 }

@@ -296,6 +296,7 @@ function handleScroll() {
   const handler =  () => {
     handleParagraphProgress()
     localStorage.setItem('lastReadParagraph', paragraphProgress.value)
+    setFocusOnNovelContent()
   }
   novelContent.value.addEventListener('scroll', handler)
   listeners.push({ element: novelContent.value, type: 'scroll', handler: handler })
@@ -470,9 +471,5 @@ function readSetting() {
 </template>
 
 <style>
-.topSearch,.catalogJump{
-  :deep(.el-input__wrapper) {
-    border-radius: 16px;
-  }
-}
+
 </style>

@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted, ref, watch, computed} from "vue";
-import {getItemInfoFromDB, updateItemInfoToDB} from "@/js/NovelItemsHandle.js"
+import {getItemInfoFromDB, updateItemInfoToDB, deleteItemInDB} from "@/js/NovelItemsHandle.js"
 import {ElMessage} from "element-plus";
 
 // defineEmits defineProps
@@ -216,7 +216,16 @@ function resetForm() {
   itemInfoFormRef.value.resetFields()
 }
 
+let deleteBtnConfirm = ref(false)
 function itemDelete() {
+  if (deleteBtnConfirm.value) {
+    const result = deleteItemInDB(itemInfoForm.value.name)
+    if (result === undefined) {
+      ElMessage.success('删除成功')
+      emit('reloadItems')
+    }
+  }
+  deleteBtnConfirm.value = !deleteBtnConfirm.value
 }
 
 // 解析本章出现的人物
@@ -289,14 +298,19 @@ function setFocusOnNovel() {
 <template>
   <div class="readingTools">
     <div class="chapterInfo">
-      <div class="card">
-        <div class="inlineDiv">
-          <div class="infoTitle width5">所在卷名：</div>
-          <div class="infoContent">{{ chapterObj.volumeTitle }}</div>
+      <div class="card inlineDiv">
+        <div class="chapterTitleInfo">
+          <div class="inlineDiv">
+            <div class="infoTitle width5">所在卷名：</div>
+            <div class="infoContent">{{ chapterObj.volumeTitle }}</div>
+          </div>
+          <div class="inlineDiv">
+            <div class="infoTitle width5">本章节名：</div>
+            <div class="infoContent">{{ chapterObj.chapterTitle }}</div>
+          </div>
         </div>
-        <div class="inlineDiv">
-          <div class="infoTitle width5">本章字数：</div>
-          <div class="infoContent">{{ chapterObj.wordNum }}</div>
+        <div class="chapterNumInfo">
+          <div class="infoContent">{{ chapterObj.wordNum }}字</div>
         </div>
       </div>
     </div>
@@ -359,7 +373,8 @@ function setFocusOnNovel() {
               <div class="girdFullRow centerOperation">
                 <el-button type="primary" @click="itemSave('noReset')">仅保存</el-button>
                 <el-button type="primary" @click="itemSave">保存</el-button>
-                <el-button type="danger" @click="itemDelete">删除</el-button>
+                <el-button v-show="!deleteBtnConfirm" type="danger" @click="itemDelete">删除</el-button>
+                <el-button v-show="deleteBtnConfirm" type="danger" @click="itemDelete">确定删除</el-button>
                 <el-button type="info" @click="resetForm">重置</el-button>
               </div>
             </el-form>

@@ -132,9 +132,6 @@
         flex: 1;
         overflow: auto;
     }
-    .catalogList::-webkit-scrollbar {
-        display: none;
-    }
     .catalogItem {
         padding: 0 36px 0 0;
         cursor: pointer;
@@ -170,6 +167,11 @@
                 color: #1b88ee;
             }
         }
+    }
+}
+.topSearch,.catalogJump{
+    .el-input__wrapper {
+        border-radius: 16px;
     }
 }
 .rightToolPart {
