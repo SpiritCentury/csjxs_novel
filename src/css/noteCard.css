@@ -1,6 +1,10 @@
 @import "./base.css";
 .noteCard {
-    height: 250px;
+    --card-height: 250px;
+    --card-header-height: 34px
+}
+.noteCard {
+    height: var(--card-height);
     width: 400px;
     background-color: white;
     box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
@@ -53,9 +57,10 @@
     }
 }
 
-.content {
+.noteCardContent {
     cursor: auto;
     overflow: auto;
+    height: calc(var(--card-height) - var(--card-header-height) - 1px);
     .itemInfo {
         display: flex;
         margin: 10px 10px;

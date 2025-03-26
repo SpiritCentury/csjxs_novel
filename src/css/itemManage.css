@@ -1,0 +1,111 @@
+@import "./base.css";
+.itemManage {
+    height: 100%;
+}
+.searchAndFilter {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    .refreshBtn {
+        margin-left: 10px;
+        cursor: pointer;
+    }
+    .searchInput {
+        max-width: 400px;
+        .el-form-item {
+            margin: 0 0 0 10px;
+        }
+        .el-input {
+            width: 200px;
+        }
+        .el-button {
+            font-family: '楷体', sans-serif;
+        }
+    }
+    .searchFilter {
+        font-family: '楷体', sans-serif;
+        max-width: 500px;
+        .el-form-item__label,label {
+            font-weight: bold;
+        }
+        .el-form-item {
+            margin: 0 0 0 30px;
+        }
+        .el-checkbox {
+            margin: 0 0 0 10px;
+        }
+    }
+    .numberDisplay {
+        margin-left: 30px;
+    }
+}
+.outerContainer {
+    overflow-y: auto;
+    padding: 0 10px;
+    height: calc(100% - 44px);
+}
+.itemCardsContainer {
+
+}
+.itemCard {
+    width: 200px;
+    border-radius: 10px;
+    min-height: 60px;
+    max-height: 400px;
+    margin-bottom: 15px;
+    transition: box-shadow 0.2s;
+    cursor: pointer;
+    user-select: none;
+}
+.colorForCharacter {
+    background-color: #E3FDFD;
+}
+.itemCard:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.colorForPlace {
+    background-color: #FAF1E6;
+}
+.colorForProps {
+    background-color: #FBFBFB;
+}
+.colorForEquipment {
+    background-color: #FCF596;
+}
+.colorForOrganization {
+    background-color: #FFF7D1;
+}
+.colorForTask {
+    background-color: #A1E3F9;
+}
+.itemHeader {
+    height: 24px;
+    display: flex;
+    padding: 3px 5px;
+}
+.itemName {
+    flex: 1;
+    font-size: 1.2em;
+    font-family: '楷体', cursive;
+    font-weight: bold;
+}
+.itemType {
+    width: 50px;
+    .el-tag {
+        font-family: '楷体', cursive;
+        font-size: 15px;
+    }
+}
+.itemInfo {
+    display: flex;
+    margin: 5px;
+    font-family: '楷体', cursive;
+    align-items: center;
+    overflow-x: auto;
+    >span {
+        flex-shrink: 0;
+    }
+    .el-tag {
+        margin-left: 3px;
+    }
+}

@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import NovelReading from "@/components/NovelReading.vue";
 import Character from "@/components/Character.vue";
+import ItemManage from "@/view/ItemManage.vue";
 const emit = defineEmits(['backHome'])
 
 function backHome() {
@@ -10,6 +11,7 @@ function backHome() {
 const menuList = ref([
   { name: '阅读', value: 'reading' },
   { name: '人物', value: 'character' },
+  { name: '词条管理', value: 'itemManage' },
   // { name: '设置', value: 'setting' }
 ])
 function handleMenuClick(menuCode) {
@@ -40,6 +42,7 @@ let showPage = ref('reading')
     <div class="container">
       <NovelReading v-show="showPage === 'reading'"></NovelReading>
       <Character v-show="showPage === 'character'"></Character>
+      <ItemManage v-show="showPage === 'itemManage'"></ItemManage>
     </div>
   </div>
 </template>

@@ -50,9 +50,6 @@ function catchNovel(fileName) {
     if (!db.objectStoreNames.contains('catalog')) {
       db.createObjectStore('catalog', { keyPath: 'id' });
     }
-    if (!db.objectStoreNames.contains('items')) {
-      db.createObjectStore('items', { keyPath: 'name' });
-    }
   };
   request.onsuccess = (event) => {
     const db = event.target.result;

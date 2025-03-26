@@ -470,6 +470,6 @@ function readSetting() {
   </div>
 </template>
 
-<style>
-
+<style scoped>
+@import '@/css/novelReading.css';
 </style>

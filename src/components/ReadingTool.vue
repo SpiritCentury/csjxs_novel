@@ -57,7 +57,7 @@ const itemInfoForm = ref({
 })
 // form选项
 const itemInfoFormTypeOptions = ref(['人物', '地点', '道具', '装备', '组织', '任务'])
-const itemInfoFormSuperPowerTypeOptions = ref(['机械', '武道', '异能', '魔法', '念力'])
+const itemInfoFormSuperPowerTypeOptions = ref(['机械', '武道', '异能', '魔法', '念力', '？？'])
 const itemInfoFormSuperPowerLevelOptions = ref(['F', 'E', 'D', 'C', 'B', 'A', 'S', 'S+', 'Ss', 'X'])
 const itemInfoFormFriendLinksOptions = computed(() => {
   return props.noteItemList.map(item => {
@@ -391,7 +391,7 @@ function setFocusOnNovel() {
             <div class="characterName">{{ c.name }}</div>
             <div class="characterDivider"></div>
             <div class="characterSuperPowerType" v-show="c.superPowerType">
-              <el-tag type="danger">{{ c.superPowerType }}系</el-tag>
+              <el-tag type="primary">{{ c.superPowerType }}系</el-tag>
             </div>
             <div class="characterSuperPowerLevel">{{ c.superPowerLevel }}</div>
             <div class="characterProminenceFirstOrLast" >
@@ -405,6 +405,6 @@ function setFocusOnNovel() {
   </div>
 </template>
 
-<style>
-
+<style scoped>
+@import '@/css/readingTool.css';
 </style>

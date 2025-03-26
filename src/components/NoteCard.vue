@@ -148,7 +148,7 @@ const cardColorClassArray = ['colorForCharacter', 'colorForPlace', 'colorForProp
         <el-icon color="black" :size="18" class="cardHeadOperationBtn" @click="closeCard"><CloseBold /></el-icon>
       </div>
     </div>
-    <div class="content noScrollbar">
+    <div class="noteCardContent noScrollbar">
       <div v-show="noteObj.labels && noteObj.labels.length > 0" class="itemInfo noScrollbar">
         <div class="itemInfoTitle">标签：</div>
         <div class="itemInfoContent">
@@ -174,6 +174,6 @@ const cardColorClassArray = ['colorForCharacter', 'colorForPlace', 'colorForProp
   </div>
 </template>
 
-<style>
-
+<style scoped>
+@import '@/css/noteCard.css';
 </style>
